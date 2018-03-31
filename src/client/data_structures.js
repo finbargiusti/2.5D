@@ -27,3 +27,7 @@ var clientCommands = new binary.Array([new binary.Dynamic({
     }),
     togglePerspective: null
 })], "short");
+
+var sharedValues = {
+    playerMovementVelocity: 200
+};
