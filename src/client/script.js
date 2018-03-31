@@ -151,6 +151,16 @@ window.addEventListener("keydown", (e) => {
             ]));
             break;
         };
+        case 83: {
+            currControls.vertical = -1;
+            socket.send(clientCommands.encode([
+                    {
+                        key: "updateControls",
+                        value: currControls
+                    }
+            ]));
+            break;
+        };
     }
 });
 
@@ -169,7 +179,7 @@ window.addEventListener("keyup", (e) => {
             ]));
             break;
         };
-        case 87: {
+        case 87: case 83: {
             currControls.vertical = 0;
             socket.send(clientCommands.encode([
                     {
