@@ -13,6 +13,8 @@ addPlayer(new Player());
 
 requestAnimationFrame(render);
 function render() {
+    
+    
     ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
     
     for (let id in players) {
@@ -27,5 +29,19 @@ function render() {
     }
     
     requestAnimationFrame(render);
-
 }
+
+let view = "x";
+
+window.addEventListener("keydown", (e) => {
+    console.log(e.keyCode) // A: 65, D: 68
+    
+    switch (e.keyCode)  {
+        case 65: {
+            
+        }; break;
+        case 68: {
+            
+        }; break;
+    }
+});
