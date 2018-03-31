@@ -70,6 +70,8 @@ function render() {
 
         switch (view) {
             case "x": canX = player.pos.y; canY = player.pos.z;
+            case "y": canX = player.pos.x; canY = player.pos.z;
+            case "z": canX = player.pos.x; canY = player.pos.y;
         }
         
         let x = mainCanvas.width / 2 + canX,
