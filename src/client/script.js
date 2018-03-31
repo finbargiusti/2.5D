@@ -114,7 +114,8 @@ let currControls = {horizontal:0, vertical:0};
 
 window.addEventListener("keydown", (e) => {
     console.log(e.keyCode) // A: 65, D: 68
-    
+    if ( this.className === 'hold' ) { return false; }
+    this.className = 'hold';
     switch (e.keyCode)  {
         case 65: {
             currControls.horizontal = -1;
