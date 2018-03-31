@@ -27,6 +27,9 @@ socket.onopen = function() {
                 case "removePlayer": {
                     delete players[value];
                 }; break;
+                case "changePerspective": {
+                    view = value;
+                }; break;
             }
         }
     }
@@ -134,8 +137,7 @@ window.addEventListener("keydown", (e) => {
                         value: currControls
                     }
             ]));
-            break;
-        };
+        }; break;
         case 68: {
             currControls.horizontal = 1;
             socket.send(clientCommands.encode([
@@ -144,8 +146,7 @@ window.addEventListener("keydown", (e) => {
                         value: currControls
                     }
             ]));
-            break;
-        };
+        }; break;
         case 87: {
             currControls.vertical = 1;
             socket.send(clientCommands.encode([
@@ -154,8 +155,7 @@ window.addEventListener("keydown", (e) => {
                         value: currControls
                     }
             ]));
-            break;
-        };
+        }; break;
         case 83: {
             currControls.vertical = -1;
             socket.send(clientCommands.encode([
@@ -164,8 +164,10 @@ window.addEventListener("keydown", (e) => {
                         value: currControls
                     }
             ]));
-            break;
-        };
+        }; break;
+        case 81: {
+            socket.send(clientCommands.encode([{key: "togglePerspective"}]));
+        }; break;
     }
 });
 

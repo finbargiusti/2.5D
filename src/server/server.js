@@ -65,6 +65,18 @@ wsServer.on("connect", (socket) => {
 			            value: players[thisId]
 			        }]));*/
         		}; break;
+                case "togglePerspective": {
+                    if (view === "x") {
+                        view = "z";
+                    } else {
+                        view = "x";
+                    }
+                    
+                    nextTickQueue.push({
+                        key: "changePerspective",
+                        value: view
+                    });
+                }; break;
         	}
         }
     });
@@ -94,6 +106,7 @@ let view = "x";
 const tickRate = 30;
 const tickInterval = 1000 / tickRate;
 let lastTick = now();
+let nextTickQueue = [];
 
 let tick = 0;
 
@@ -105,6 +118,9 @@ setInterval(() => {
         for (let id in players) {
             players[id].update();
         }
+        
+        sendToEveryone(serverCommands.encode(nextTickQueue));
+        nextTickQueue = [];
         
         lastTick += tickInterval;
     }
