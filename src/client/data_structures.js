@@ -25,3 +25,7 @@ var clientCommands = new binary.Array([new binary.Dynamic({
         vertical: new binary.Number("sByte")
     })    
 })], "short");
+
+var sharedValues = {
+    playerMovementVelocity: 200
+};

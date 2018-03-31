@@ -16,12 +16,10 @@ socket.onopen = function() {
                 case "sendPlayer": {
                     if (players[value.id]) {
                         players[value.id].redefine(value);
-                        console.log(players[value.id])
+                        //console.log(players[value.id])
                     } else {
                         const newPlayer = new Player(value.id);
                         newPlayer.redefine(value);
-
-
                         
                         addPlayer(newPlayer);
                     }
@@ -53,8 +51,14 @@ let cock = 0;
 requestAnimationFrame(render);
 function render() {
     const now = window.performance.now();
-    if (now - lastTick >= tickInterval) {
-        lastTick = now;
+    const difference = now - lastTick;
+    
+    for (let i = 0; i < Math.floor(difference / tickInterval); i++) {
+        for (var id in players) {
+            players[id].update();
+        }
+        
+        lastTick += tickInterval;
     }
     
     ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
@@ -119,7 +123,6 @@ window.addEventListener("keydown", (e) => {
     lastKeyCode = e.keyCode;
 
     console.log(e.keyCode) // A: 65, D: 68
-
     switch (e.keyCode)  {
         case 65: {
             currControls.horizontal = -1;
@@ -193,5 +196,5 @@ window.addEventListener("keyup", (e) => {
 });
 
 
-
+// finbar code tm
 

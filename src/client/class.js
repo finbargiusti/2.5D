@@ -14,6 +14,22 @@ class Player {
         this.vel.override(playerData.vel);
         this.controls = playerData.controls;
     }
+    
+    update() {
+        if (view === "x") {
+            if (Math.abs(this.controls.horizontal) === 1) {
+                this.vel.y = sharedValues.playerMovementVelocity * this.controls.horizontal;
+            } else {
+                //this.vel.y -= 10 * Math.sign(this.vel.y);
+                this.vel.y = 0;
+            }
+        }
+        
+        const newVector = new Vector3D();
+        newVector.override(this.vel);
+        newVector.scale(1 / tickRate);
+        this.pos.addVector(newVector);
+    }
 }
 
 class Vector3D {

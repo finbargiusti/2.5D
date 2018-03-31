@@ -58,10 +58,12 @@ wsServer.on("connect", (socket) => {
         	switch(key) {
         		case "updateControls": {
         			players[thisId].controls = value;
-			        sendToEveryone(serverCommands.encode([{
+                    players[thisId].updated = true;
+                    
+			        /*sendToEveryone(serverCommands.encode([{
 			            key: "sendPlayer",
 			            value: players[thisId]
-			        }]));
+			        }]));*/
         		}; break;
         	}
         }
@@ -87,6 +89,7 @@ function sendToEveryone(msg) {
 let lastSocketId = 0;
 const sockets = Object.create(null);
 const players = Object.create(null);
+let view = "x";
 
 const tickRate = 30;
 const tickInterval = 1000 / tickRate;
@@ -96,11 +99,14 @@ let tick = 0;
 
 setInterval(() => {
     const nowNow = now();
+    const difference = nowNow - lastTick;
     
-    if (nowNow - lastTick >= tickInterval) {
+    for (let i = 0; i < Math.floor(difference / tickInterval); i++) {
+        for (let id in players) {
+            players[id].update();
+        }
         
-        
-        lastTick = nowNow;
+        lastTick += tickInterval;
     }
 }, 0);
 
@@ -136,6 +142,33 @@ class Player {
             horizontal: 0,
             vertical: 0
         };
+        this.updated = false;
+    };
+    
+    update() {
+        if (view === "x") {
+            if (Math.abs(this.controls.horizontal) === 1) {
+                this.vel.y = sharedValues.playerMovementVelocity * this.controls.horizontal;
+            } else {
+                //this.vel.y -= 10 * Math.sign(this.vel.y);
+                this.vel.y = 0;
+            }
+        }
+        
+        const newVector = new Vector3D();
+        newVector.override(this.vel);
+        newVector.scale(1 / tickRate);
+        
+        if (this.updated) {
+            sendToEveryone(serverCommands.encode([{
+                key: "sendPlayer",
+                value: this
+            }]));
+            
+            this.updated = false;
+        }
+        
+        this.pos.addVector(newVector);
     }
 }
 
@@ -160,5 +193,11 @@ class Vector3D {
     
     getLength() {
         return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
+    }
+    
+    override(v2) {
+        this.x = v2.x;
+        this.y = v2.y;
+        this.z = v2.z;
     }
 }
