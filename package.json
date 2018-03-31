@@ -1,0 +1,22 @@
+{
+  "name": "2.5d",
+  "version": "1.0.0",
+  "description": "Game",
+  "main": "src/server/server.js",
+  "scripts": {
+    "start": "nodemon src/server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/finbargiusti/2.5D.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/finbargiusti/2.5D/issues"
+  },
+  "homepage": "https://github.com/finbargiusti/2.5D#readme",
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  }
+}
