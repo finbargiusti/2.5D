@@ -1,21 +1,62 @@
 const socket = new WebSocket("ws://" + window.location.host);
 
+
 let view = "x";
+
+
+socket.onopen = function() {
+    socket.send("fucktareare ur mom lesbian");
+    
+    socket.onmessage = function(e) {
+        const serverCommand = serverCommands.decode(e.data);
+        
+        for (let i = 0; i < serverCommand.length; i++) {
+            const key = serverCommand[i].key;
+            const value = serverCommand[i].value;
+            
+            switch (key) {
+                case "sendPlayer": {
+                    if (players[value.id]) {
+                        players[value.id].redefine(value);
+                    } else {
+                        const newPlayer = new Player(value.id);
+                        newPlayer.redefine(value);
+                        
+                        addPlayer(newPlayer);
+                    }
+                }; break;
+                case "removePlayer": {
+                    delete players[value];
+                }; break;
+            }
+        }
+    }
+};
+
 
 Math.TAU = Math.PI * 2;
 
-let lastPlayerId = 0;
 const players = Object.create(null);
 
 function addPlayer(player) {
-    players[lastPlayerId++] = player;
+    players[player.id] = player;
 }
 
-addPlayer(new Player());
+//addPlayer(new Player());
+
+const tickRate = 30;
+const tickInterval = 1000 / 30;
+let lastTick = window.performance.now();
+let cock = 0;
 
 requestAnimationFrame(render);
 function render() {
-    
+    const now = window.performance.now();
+    if (now - lastTick >= tickInterval) {
+        //console.log(cock++)
+        
+        lastTick = now;
+    }
     
     ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
     
@@ -81,4 +122,4 @@ window.addEventListener("keydown", (e) => {
             break;
         };
     }
-})  ;
+});
