@@ -111,11 +111,15 @@ function render() {
 
 let currControls = {horizontal:0, vertical:0};
 
+let lastKeyCode = undefined;
 
 window.addEventListener("keydown", (e) => {
+
+    if (e.keyCode == lastKeyCode) return false;
+    lastKeyCode = e.keyCode;
+
     console.log(e.keyCode) // A: 65, D: 68
-    if ( this.className === 'hold' ) { return false; }
-    this.className = 'hold';
+
     switch (e.keyCode)  {
         case 65: {
             currControls.horizontal = -1;
@@ -151,7 +155,8 @@ window.addEventListener("keydown", (e) => {
 });
 
 window.addEventListener("keyup", (e) => {
-    console.log(e.keyCode) // A: 65, D: 68
+
+    lastKeyCode = undefined;
     
     switch (e.keyCode)  {
         case 65: case 68: {
