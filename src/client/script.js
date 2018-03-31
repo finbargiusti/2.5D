@@ -1,3 +1,5 @@
+const socket = new WebSocket("ws://" + window.location.host);
+
 Math.TAU = Math.PI * 2;
 
 let lastPlayerId = 0;

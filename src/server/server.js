@@ -2,6 +2,7 @@ const http = require('http');
 const port = 5000;
 const url = require("url");
 const fs = require("fs");
+const WebSocketServer = require("websocket").server;
 
 const server = http.createServer();
 
@@ -21,3 +22,12 @@ server.on("request", function(request, response){
 });
 
 server.listen(port);
+
+const wsServer = new WebSocketServer({
+    httpServer: server,
+    autoAcceptConnections: true
+});
+
+wsServer.on("connect", function() {
+    console.log("Cunt");
+});

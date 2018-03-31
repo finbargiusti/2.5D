@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/finbargiusti/2.5D#readme",
   "devDependencies": {
-    "nodemon": "^1.17.3"
+    "nodemon": "^1.17.3",
+    "websocket": "^1.0.25"
   }
 }
