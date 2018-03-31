@@ -5,8 +5,6 @@ let view = "x";
 
 
 socket.onopen = function() {
-    socket.send("fucktareare ur mom lesbian");
-    
     socket.onmessage = function(e) {
         const serverCommand = serverCommands.decode(e.data);
         
@@ -18,9 +16,12 @@ socket.onopen = function() {
                 case "sendPlayer": {
                     if (players[value.id]) {
                         players[value.id].redefine(value);
+                        console.log(players[value.id])
                     } else {
                         const newPlayer = new Player(value.id);
                         newPlayer.redefine(value);
+
+
                         
                         addPlayer(newPlayer);
                     }
@@ -53,8 +54,6 @@ requestAnimationFrame(render);
 function render() {
     const now = window.performance.now();
     if (now - lastTick >= tickInterval) {
-        //console.log(cock++)
-        
         lastTick = now;
     }
     
@@ -80,46 +79,103 @@ function render() {
     requestAnimationFrame(render);
 }
 
-function requestMove(direction) {
-    switch (view) {
-        case "x": {
-            if (direction == "left"){
-                players[0].pos.addVector(new Vector3D(0, -5, 0));
-            }
-            if (direction == "right"){
-                players[0].pos.addVector(new Vector3D(0, 5, 0));
-            }
-        };
-        case "y": {
-            if (direction == "left"){
-                players[0].pos.addVector(new Vector3D(0, -5, 0));
-            }
-            if (direction == "right"){
-                players[0].pos.addVector(new Vector3D(0, 5, 0));
-            }
-        };
-        case "z": {
-            if (direction == "left"){
-                players[0].pos.addVector(new Vector3D(0, -5, 0));
-            }
-            if (direction == "right"){
-                players[0].pos.addVector(new Vector3D(0, 5, 0));
-            }
-        };
-    }
-} 
+// function requestMove(direction) {
+//     switch (view) {
+//         case "x": {
+//             if (direction == "left"){
+//                 players[0].pos.addVector(new Vector3D(0, -5, 0));
+//             }
+//             if (direction == "right"){
+//                 players[0].pos.addVector(new Vector3D(0, 5, 0));
+//             }
+//         };
+//         case "y": {
+//             if (direction == "left"){
+//                 players[0].pos.addVector(new Vector3D(0, -5, 0));
+//             }
+//             if (direction == "right"){
+//                 players[0].pos.addVector(new Vector3D(0, 5, 0));
+//             }
+//         };
+//         case "z": {
+//             if (direction == "left"){
+//                 players[0].pos.addVector(new Vector3D(0, -5, 0));
+//             }
+//             if (direction == "right"){
+//                 players[0].pos.addVector(new Vector3D(0, 5, 0));
+//             }
+//         };
+//     }
+// } 
+
+
+let currControls = {horizontal:0, vertical:0};
+
 
 window.addEventListener("keydown", (e) => {
     console.log(e.keyCode) // A: 65, D: 68
     
     switch (e.keyCode)  {
         case 65: {
-            requestMove("left")
+            currControls.horizontal = -1;
+            socket.send(clientCommands.encode([
+                    {
+                        key: "updateControls",
+                        value: currControls
+                    }
+            ]));
             break;
         };
         case 68: {
-            requestMove("right")
+            currControls.horizontal = 1;
+            socket.send(clientCommands.encode([
+                    {
+                        key: "updateControls",
+                        value: currControls
+                    }
+            ]));
+            break;
+        };
+        case 87: {
+            currControls.vertical = 1;
+            socket.send(clientCommands.encode([
+                    {
+                        key: "updateControls",
+                        value: currControls
+                    }
+            ]));
             break;
         };
     }
 });
+
+window.addEventListener("keyup", (e) => {
+    console.log(e.keyCode) // A: 65, D: 68
+    
+    switch (e.keyCode)  {
+        case 65: case 68: {
+            currControls.horizontal = 0;
+            socket.send(clientCommands.encode([
+                    {
+                        key: "updateControls",
+                        value: currControls
+                    }
+            ]));
+            break;
+        };
+        case 87: {
+            currControls.vertical = 0;
+            socket.send(clientCommands.encode([
+                    {
+                        key: "updateControls",
+                        value: currControls
+                    }
+            ]));
+            break;
+        };
+    }
+});
+
+
+
+

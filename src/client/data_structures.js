@@ -20,5 +20,8 @@ var serverCommands = new binary.Array([new binary.Dynamic({
 })], "short");
 
 var clientCommands = new binary.Array([new binary.Dynamic({
-    
+    updateControls: new binary.Object({
+        horizontal: new binary.Number("sByte"),
+        vertical: new binary.Number("sByte")
+    })    
 })], "short");

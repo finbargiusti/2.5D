@@ -48,6 +48,23 @@ wsServer.on("connect", (socket) => {
     
     socket.on("message", (event) => {
         const msg = event.utf8Data;
+
+        const clientCommand = clientCommands.decode(msg);
+
+        for (let i = 0; i < clientCommand.length; ++i) {
+        	const key = clientCommand[i].key
+        	const value = clientCommand[i].value
+
+        	switch(key) {
+        		case "updateControls": {
+        			players[thisId].controls = value;
+			        sendToEveryone(serverCommands.encode([{
+			            key: "sendPlayer",
+			            value: players[thisId]
+			        }]));
+        		}; break;
+        	}
+        }
     });
     
     socket.on("close", () => {
