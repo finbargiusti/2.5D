@@ -43,6 +43,10 @@ wsServer.on("connect", (socket) => {
             value: players[id]
         });
     }
+    arr.push({
+        key: "changePerspective",
+        value: view
+    });
     
     sendToEveryone(serverCommands.encode(arr));
     
@@ -152,7 +156,7 @@ function now() {
 class Player {
     constructor(id) {
         this.id = id;
-        this.pos = new Vector3D(Math.random() * 150 - 75, 0, 0);
+        this.pos = new Vector3D(0, 0, 0);
         this.vel = new Vector3D(0, 0, 0);
         this.controls = {
             horizontal: 0,
@@ -168,6 +172,27 @@ class Player {
             } else {
                 //this.vel.y -= 10 * Math.sign(this.vel.y);
                 this.vel.y = 0;
+            }
+        } else if (view === "y") {
+            if (Math.abs(this.controls.horizontal) === 1) {
+                this.vel.x = sharedValues.playerMovementVelocity * this.controls.horizontal;
+            } else {
+                //this.vel.y -= 10 * Math.sign(this.vel.y);
+                this.vel.x = 0;
+            }
+        } else if (view === "z") {
+            if (Math.abs(this.controls.horizontal) === 1) {
+                this.vel.y = sharedValues.playerMovementVelocity * this.controls.horizontal;
+            } else {
+                //this.vel.y -= 10 * Math.sign(this.vel.y);
+                this.vel.y = 0;
+            }
+            
+            if (Math.abs(this.controls.vertical) === 1) {
+                this.vel.x = sharedValues.playerMovementVelocity * this.controls.vertical;
+            } else {
+                //this.vel.y -= 10 * Math.sign(this.vel.y);
+                this.vel.x = 0;
             }
         }
         

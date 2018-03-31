@@ -81,8 +81,8 @@ function render() {
                 canY = player.pos.z;
             }; break;
             case "z": {
-                canX = player.pos.x;
-                canY = player.pos.y;
+                canX = player.pos.y;
+                canY = player.pos.x;
             }; break;
         }
         
@@ -157,7 +157,7 @@ window.addEventListener("keydown", (e) => {
             ]));
         }; break;
         case 87: {
-            currControls.vertical = 1;
+            currControls.vertical = -1;
             socket.send(clientCommands.encode([
                     {
                         key: "updateControls",
@@ -166,7 +166,7 @@ window.addEventListener("keydown", (e) => {
             ]));
         }; break;
         case 83: {
-            currControls.vertical = -1;
+            currControls.vertical = 1;
             socket.send(clientCommands.encode([
                     {
                         key: "updateControls",

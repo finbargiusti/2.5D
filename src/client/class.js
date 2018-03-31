@@ -23,7 +23,29 @@ class Player {
                 //this.vel.y -= 10 * Math.sign(this.vel.y);
                 this.vel.y = 0;
             }
+        } else if (view === "y") {
+            if (Math.abs(this.controls.horizontal) === 1) {
+                this.vel.x = sharedValues.playerMovementVelocity * this.controls.horizontal;
+            } else {
+                //this.vel.y -= 10 * Math.sign(this.vel.y);
+                this.vel.x = 0;
+            }
+        } else if (view === "z") {
+            if (Math.abs(this.controls.horizontal) === 1) {
+                this.vel.y = sharedValues.playerMovementVelocity * this.controls.horizontal;
+            } else {
+                //this.vel.y -= 10 * Math.sign(this.vel.y);
+                this.vel.y = 0;
+            }
+            
+            if (Math.abs(this.controls.vertical) === 1) {
+                this.vel.x = sharedValues.playerMovementVelocity * this.controls.vertical;
+            } else {
+                //this.vel.y -= 10 * Math.sign(this.vel.y);
+                this.vel.x = 0;
+            }
         }
+        
         
         const newVector = new Vector3D();
         newVector.override(this.vel);
