@@ -135,7 +135,7 @@
         getFaces() {
             const faces = [];
 
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < 6; i++) {
                 let c1 = this.p1.makeCopy(),
                     c2 = this.p2.makeCopy(),
                     dimension = ["x", "y", "z"][Math.floor(i / 2)];
