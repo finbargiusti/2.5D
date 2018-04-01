@@ -1,0 +1,289 @@
+<html>
+    <head>
+        <title>Orthogonal 3D Testing</title>
+        <style>
+            #mainCanvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="mainCanvas" width=600 height=600></canvas>
+        
+        <!--<script src="2.5DEngine.js"></script>-->
+        <script>
+            /*
+            const mainCanvas = document.getElementById("mainCanvas");
+            const ctx = mainCanvas.getContext("2d");
+            
+            
+            const cube = new Cuboid(new Vector3D(-100, -100, -100), new Vector3D(100, 100, 100), ["hsl(0, 100%, 50%)", "hsl(50, 100%, 50%)", "hsl(100, 100%, 50%)", "hsl(150, 100%, 50%)", "hsl(200, 100%, 50%)", "hsl(250, 100%, 50%)"]);
+            console.log(cube.getFaces());
+            
+            const scene = new Scene();
+            scene.objects.push(cube);
+            
+            render();
+            function render() {
+                ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+                
+                scene.render(ctx);
+                
+                
+                requestAnimationFrame(render);
+            }
+            */
+            
+        </script>
+        
+        <script>
+            const mainCanvas = document.getElementById("mainCanvas");
+            const ctx = mainCanvas.getContext("2d");
+            
+            const points = [];
+            class Point {
+                constructor(x, y, z) {
+                    this.x = x;
+                    this.y = y;
+                    this.z = z;
+                }
+                
+                makeCopy() {
+                    return new Point(this.x, this.y, this.z);
+                }
+                
+                subtractPoint(p2) {
+                    this.x -= p2.x;
+                    this.y -= p2.y;
+                    this.z -= p2.z;
+                }
+                
+                crossProduct(p2) {
+                    return new Point(this.y * p2.z - p2.y * this.z, this.z * p2.x - p2.z * this.x, this.x * p2.y - p2.x * this.y);
+                }
+                
+                dotProduct(p2) {
+                    return this.x * p2.x + this.y * p2.y + this.z * p2.z;
+                }
+                
+                getMagnitude() {
+                    return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
+                }
+            }
+            const lines = [];
+            class Line {
+                constructor(p1, p2) {
+                    this.p1 = p1;
+                    this.p2 = p2;
+                }
+            }
+            const faces = [];
+            class Face {
+                constructor(p1, p2, p3) {
+                    this.p1 = p1;
+                    this.p2 = p2;
+                    this.p3 = p3;
+                }
+            }
+            
+            /*
+            points.push(new Point(-100, -100, -100));
+            points.push(new Point(100, 100, -100));
+            points.push(new Point(-100, 100, -100));
+            points.push(new Point(100, -100, -100));
+            points.push(new Point(-100, -100, 100));
+            points.push(new Point(100, 100, 100));
+            points.push(new Point(-100, 100, 100));
+            points.push(new Point(100, -100, 100));
+            
+            lines.push(new Line(new Point(0, 0, 0), new Point(-1000, 0, 0)));
+            lines.push(new Line(new Point(100, 100, 100), new Point(100, -100, 100)));
+            lines.push(new Line(new Point(100, 100, -100), new Point(100, -100, -100)));
+            lines.push(new Line(new Point(100, 100, 100), new Point(100, 100, -100)));
+            lines.push(new Line(new Point(100, -100, -100), new Point(100, -100, 100)));
+            lines.push(new Line(new Point(100, 100, 100), new Point(0, 0, 0)));
+            lines.push(new Line(new Point(100, 100, -100), new Point(0, 0, 0)));
+            lines.push(new Line(new Point(100, -100, 100), new Point(0, 0, 0)));
+            lines.push(new Line(new Point(100, -100, -100), new Point(0, 0, 0)));
+            
+            points.push(new Point(0, 0, 0));
+            points.push(new Point(0, 20, 0));
+            points.push(new Point(0, -20, 0));
+            points.push(new Point(0, 0, 20));
+            points.push(new Point(0, 20, 20));
+            points.push(new Point(0, -20, 20));
+            points.push(new Point(0, 0, -20));
+            points.push(new Point(0, 20, -20));
+            points.push(new Point(0, -20, -20));
+            points.push(new Point(-20, 0, 0));
+            
+            faces.push(new Face(new Point(100, 100, 100), new Point(-100, 100, 100), new Point(-100, 100, -100)));
+            faces.push(new Face(new Point(100, 100, 100), new Point(100, 100, -100), new Point(-100, 100, -100)));
+            faces.push(new Face(new Point(100, 100, 100), new Point(-100, 100, 100), new Point(-100, -100, 100)));
+            */
+            
+            /*
+            faces.push(new Face(new Point(100, 100, 100), new Point(-100, 100, 100), new Point(-100, 100, -100)));
+            faces.push(new Face(new Point(100, 100, 100), new Point(100, 100, -100), new Point(-100, 100, -100)));
+            faces.push(new Face(new Point(100, 100, -70), new Point(100, -100, -70), new Point(-100, -100, -70)));
+            faces.push(new Face(new Point(100, 80, 100), new Point(-100, 80, 100), new Point(-100, 80, -100)));
+            */
+            
+            faces.push(new Face(new Point(100, 100, 100), new Point(-100, 100, 100), new Point(-100, 100, -100)));
+            faces.push(new Face(new Point(100, 100, 100), new Point(100, 100, -100), new Point(-100, 100, -100)));
+            faces.push(new Face(new Point(100, -100, 100), new Point(-100, -100, 100), new Point(-100, -100, -100)));
+            faces.push(new Face(new Point(100, -100, 100), new Point(100, -100, -100), new Point(-100, -100, -100)));
+            faces.push(new Face(new Point(-100, -100, 100), new Point(-100, 100, 100), new Point(-100, -100, -100)));
+            faces.push(new Face(new Point(-100, 100, -100), new Point(-100, 100, 100), new Point(-100, -100, -100)));
+            
+            //faces.push(new Face(new Point(100, 100, -70), new Point(100, -100, -70), new Point(-100, -100, -70)));
+            
+            points.push(new Point(0, 0, 100));
+            points.push(new Point(0, 0, 0));
+            points.push(new Point(100, 0, 0));
+            points.push(new Point(0, 100, 0));
+            
+            /*for (var i = 0; i < 100; i++) {
+                points.push(new Point(Math.random() * 400 - 200, Math.random() * 400 - 200, Math.random() * 400 - 200));
+            }*/
+            
+            let zRot = 0, // Rotation z axis
+                rotUp = Math.PI / 8, // Rotation up/down
+                lightSource = new Point(1, 0, 0);
+            
+            let zRotLight = 0,
+                rotUpLight = -Math.PI / 2;
+            
+            lightSource = new Point(Math.cos(zRotLight) * Math.cos(rotUpLight), Math.sin(zRotLight) * Math.cos(rotUpLight), Math.sin(rotUpLight));
+            console.log(lightSource)
+            
+            render();
+            function render() {
+                ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+                
+                const cameraVector = new Point(Math.cos(zRot) * Math.cos(rotUp), Math.sin(zRot) * Math.cos(rotUp), Math.sin(rotUp));
+                
+                const processedObjects = [];
+                
+                
+                
+                for (let i = 0; i < faces.length; i++) {
+                    const dotProductP1 = faces[i].p1.x * cameraVector.x + faces[i].p1.y * cameraVector.y + faces[i].p1.z * cameraVector.z,
+                          dotProductP2 = faces[i].p2.x * cameraVector.x + faces[i].p2.y * cameraVector.y + faces[i].p2.z * cameraVector.z,
+                          dotProductP3 = faces[i].p3.x * cameraVector.x + faces[i].p3.y * cameraVector.y + faces[i].p3.z * cameraVector.z
+                    
+                    // const biggestDotProduct = Math.max(Math.max(dotProductP1, dotProductP2), dotProductP3);
+                    
+                    processedObjects.push({dotProducts: [dotProductP1, dotProductP2, dotProductP3], object: faces[i], id: i});
+                }
+                for (let i = 0; i < points.length; i++) {
+                    const dotProduct = points[i].x * cameraVector.x + points[i].y * cameraVector.y + points[i].z * cameraVector.z;
+                    
+                    //processedObjects.push({dotProducts: [dotProduct], object: points[i], id: i});
+                }
+                
+                processedObjects.sort(function(a, b) {
+                    if (a.object.constructor.name === "Point" && b.object.constructor.name === "Point") {
+                        return a.dotProducts[0] - b.dotProducts[0];
+                    }
+                    
+                    
+                    let aCount = 0,
+                        bCount = 0;
+                    
+                    if (a.dotProducts[0] > b.dotProducts[0]) aCount++; else bCount++;
+                    if (a.dotProducts[1] > b.dotProducts[1]) aCount++; else bCount++;
+                    if (a.dotProducts[2] > b.dotProducts[2]) aCount++; else bCount++;
+                    
+                    let sum1 = a.dotProducts[0] + a.dotProducts[1] + a.dotProducts[2],
+                        sum2 = b.dotProducts[0] + b.dotProducts[1] + b.dotProducts[2];
+                    
+                    
+            let max1 = Math.max(Math.max(a.dotProducts[0], a.dotProducts[1]), a.dotProducts[2]),
+                max2 = Math.max(Math.max(b.dotProducts[0], b.dotProducts[1]), b.dotProducts[2]);
+            
+            return -max1 + max2;
+                    
+                    //return sum1 - sum2;
+                    return aCount - bCount;
+                });
+                
+                for (let i = 0; i < processedObjects.length; i++) {
+                    const id = processedObjects[i].id;
+                    
+                    if (processedObjects[i].object.constructor.name === "Point") {
+                        const p = project(processedObjects[i].object);
+                    
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, 5, 0, Math.PI*2);
+                        ctx.fillStyle = "hsl(" + (id * 50) + ", 80%, 50%)";
+                        ctx.fill();
+                    } else if (processedObjects[i].object.constructor.name === "Face") {
+                        const face = processedObjects[i].object;
+
+                        const p1 = project(face.p1),
+                              p2 = project(face.p2),
+                              p3 = project(face.p3);
+                        
+                        const v1 = face.p2.makeCopy(),
+                              v2 = face.p3.makeCopy();
+                        
+                        v1.subtractPoint(face.p1);
+                        v2.subtractPoint(face.p1);
+                        
+                        const crossProduct = v1.crossProduct(v2);
+                        console.log(crossProduct)
+                        
+                        const dotProduct = crossProduct.dotProduct(lightSource) / crossProduct.getMagnitude();
+                        
+                        //console.log(dotProduct)
+
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.lineTo(p3.x, p3.y);
+                        ctx.closePath();
+                        ctx.fillStyle = "hsla(" + (id * 50) + ", 80%, " + (dotProduct * 50 * 0 + 50) + "%, 1)";
+                        ctx.fill();
+                    }
+                }
+                
+                /*
+                for (let i = 0; i < lines.length; i++) {
+                    const p1 = project(lines[i].p1),
+                          p2 = project(lines[i].p2);
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.strokeStyle = "hsl(" + (i * 50) + ", 80%, 70%)";
+                    ctx.stroke();
+                }
+                
+                for (let i = 0; i < points.length; i++) {
+                    const p = project(points[i]);
+                    
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 5, 0, Math.PI*2);
+                    ctx.fillStyle = "hsl(" + (i * 50) + ", 80%, 50%)";
+                    ctx.fill();
+                }
+                */
+                
+                
+                zRot += 0.006;
+                requestAnimationFrame(render);
+            }
+            
+            function project(point) {
+                const x = mainCanvas.width/2 + point.y * Math.cos(zRot) + point.x * Math.sin(zRot),
+                      y = mainCanvas.height/2 - point.z * Math.cos(rotUp) - (point.x * Math.cos(zRot) - point.y * Math.sin(zRot)) * Math.sin(rotUp);
+                
+                return {
+                    x: x,
+                    y: y
+                };
+            }
+        </script>
+    </body>
+</html>
