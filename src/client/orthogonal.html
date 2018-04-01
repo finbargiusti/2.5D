@@ -22,6 +22,7 @@
             
             const scene = new Engine.Scene();
             scene.objects.push(cube);
+            scene.objects.push(new Engine.Point(new Engine.V(0, 0, 100), "red"));
             
             render();
             function render() {

@@ -76,8 +76,24 @@
                 ctx.lineTo(p2.x, p2.y);
                 ctx.lineTo(p3.x, p3.y);
                 ctx.closePath();
-                ctx.fillStyle = face.material;
-                ctx.fill();
+                /*ctx.fillStyle = face.material;
+                ctx.fill();*/
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = face.material;
+                ctx.stroke();
+            }
+            
+            for (let i = 0; i < this.objects.length; i++) {
+                const object = this.objects[i];
+                
+                if (object.constructor.name === "Point") {
+                    const p = this.project(object.p);
+                    
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+                    ctx.fillStyle = object.material;
+                    ctx.fill();
+                }
             }
         }
     }
@@ -122,6 +138,13 @@
         constructor() {
             this.rotZ = 0;
             this.rotUp = 0;
+        }
+    }
+    
+    class Point {
+        constructor(p, material) {
+            this.p = p;
+            this.material = material;
         }
     }
 
@@ -197,6 +220,7 @@
     window.Engine = {
         Scene: Scene,
         V: V,
-        Cuboid: Cuboid
+        Cuboid: Cuboid,
+        Point: Point
     };
 })();
