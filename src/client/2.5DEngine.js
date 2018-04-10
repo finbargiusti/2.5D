@@ -20,15 +20,14 @@
             for (let i = 0; i < this.objects.length; i++) {
                 const object = this.objects[i];
 
-                if (object.constructor.name === "Cuboid") {
+                if (object.constructor.name === "Point") {
+                    processedObjects.push(new ProcessedPoint(object, cameraVector));
+                } else if (object.constructor.name === "Cuboid") {
                     const faces = object.getFaces();
                     for (let j = 0; j < faces.length; j++) {
                         processedObjects.push(new ProcessedFace(faces[j], cameraVector));
                     }
-                } else if (object.constructor.name === "Point") {
-                    processedObjects.push(new ProcessedPoint(object, cameraVector));
                 }
-            }
 
             processedObjects.sort(function(a, b) {
                 
@@ -52,6 +51,12 @@
                     //return min1 - min2;
                     //return sum1 - sum2;
                     return aCount - bCount;
+                } else if (a.constructor.name === "ProcessedFace" && b.constructor.name === "ProcessedPoint" || b.constructor.name === "ProcessedFace" && a.constructor.name === "ProcessedPoint") {
+                    if (a.constructor.name === "ProcessedFace") {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
                 }
             });
 
@@ -139,6 +144,7 @@
             }
         }
     }
+}
 
     class V {
         constructor(x, y, z) {
@@ -173,6 +179,11 @@
 
         getMagnitude() {
             return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
+        }
+        override(v2) {
+            this.x = v2.x;
+            this.y = v2.y;
+            this.z = v2.z;
         }
     }
 

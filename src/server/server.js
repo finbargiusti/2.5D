@@ -11,12 +11,14 @@ const server = http.createServer();
 server.on("request", function(request, response){
     const parsedURL = url.parse(request.url);
     let path = parsedURL.path;
+
+    console.log(request.headers)
     
     if (path === "/") path += "index.html";
     
     fs.readFile(__dirname + "/../client" + path, (err, data) => {
         if (!err) {
-            response.end(data.toString());
+            response.end(data);
         } else {
             response.end("404");
         }
@@ -72,8 +74,10 @@ wsServer.on("connect", (socket) => {
                 case "togglePerspective": {
                     if (view === "x") {
                         view = "z";
+                    } else  if (view === "z") {
+                        view = "y";
                     } else {
-                        view = "x";
+                        view = "x"
                     }
                     
                     nextTickQueue.push({
@@ -170,31 +174,38 @@ class Player {
             if (Math.abs(this.controls.horizontal) === 1) {
                 this.vel.y = sharedValues.playerMovementVelocity * this.controls.horizontal;
             } else {
-                //this.vel.y -= 10 * Math.sign(this.vel.y);
-                this.vel.y = 0;
+                this.vel.y -= 10 * Math.sign(this.vel.y);
+            }
+            if (this.controls.vertical === 1) {
+                if (this.pos.z === 0) {
+                    this.vel.z = 100;
+                }
             }
         } else if (view === "y") {
             if (Math.abs(this.controls.horizontal) === 1) {
                 this.vel.x = sharedValues.playerMovementVelocity * this.controls.horizontal;
             } else {
-                //this.vel.y -= 10 * Math.sign(this.vel.y);
-                this.vel.x = 0;
+                this.vel.x -= 10 * Math.sign(this.vel.x);
+            }
+            if (this.controls.vertical === 1) {
+                if (this.pos.z === 0) {
+                    this.vel.z = 100;
+                }
             }
         } else if (view === "z") {
             if (Math.abs(this.controls.horizontal) === 1) {
                 this.vel.y = sharedValues.playerMovementVelocity * this.controls.horizontal;
             } else {
-                //this.vel.y -= 10 * Math.sign(this.vel.y);
-                this.vel.y = 0;
+                this.vel.y -= 10 * Math.sign(this.vel.y);
             }
             
             if (Math.abs(this.controls.vertical) === 1) {
                 this.vel.x = sharedValues.playerMovementVelocity * this.controls.vertical;
             } else {
-                //this.vel.y -= 10 * Math.sign(this.vel.y);
-                this.vel.x = 0;
+                this.vel.x -= 10 * Math.sign(this.vel.x);
             }
         }
+        
         
         const newVector = new Vector3D();
         newVector.override(this.vel);
@@ -210,6 +221,13 @@ class Player {
         }
         
         this.pos.addVector(newVector);
+
+        if (this.pos.z > 0) {
+            this.vel.z -= 5;
+        } else {
+            this.pos.z = 0;
+            this.vel.z = 0;
+        }
     }
 }
 

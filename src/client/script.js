@@ -16,9 +16,12 @@ socket.onopen = function() {
                 case "sendPlayer": {
                     if (players[value.id]) {
                         players[value.id].redefine(value);
-                        //console.log(players[value.id])
+                        players[value.id].point.p.x = value.pos.x
+                        players[value.id].point.p.y = value.pos.y
+                        players[value.id].point.p.z = value.pos.z
                     } else {
-                        const newPlayer = new Player(value.id);
+                        let ppoint = new Engine.Point(new Engine.V(value.pos.x, value.pos.y, value.pos.z+20), "hsl("+value.id * 50+", 100%, 50%)");
+                        const newPlayer = new Player(value.id, ppoint);
                         newPlayer.redefine(value);
                         
                         addPlayer(newPlayer);
@@ -29,6 +32,7 @@ socket.onopen = function() {
                 }; break;
                 case "changePerspective": {
                     view = value;
+                    document.getElementById("view").innerHTML = view;
                 }; break;
             }
         }
@@ -42,6 +46,7 @@ const players = Object.create(null);
 
 function addPlayer(player) {
     players[player.id] = player;
+    scene.objects.push(players[player.id].point)
 }
 
 //addPlayer(new Player());
@@ -53,6 +58,8 @@ let cock = 0;
 
 requestAnimationFrame(render);
 function render() {
+    mainCanvas.width = window.innerWidth;
+    mainCanvas.height = window.innerHeight;
     const now = window.performance.now();
     const difference = now - lastTick;
     
@@ -60,71 +67,53 @@ function render() {
         for (var id in players) {
             players[id].update();
         }
+
+        if (view === "x") {
+            if (scene.camera.rotUp > (0.04)) {
+                scene.camera.rotUp -= Math.min(0.015, -0.04 + scene.camera.rotUp);
+            } else if (scene.camera.rotUp < (0.04)) {
+                scene.camera.rotUp += Math.min(0.015, Math.abs(0.04 - scene.camera.rotUp));
+            }
+            if (scene.camera.rotZ > 0) {
+                scene.camera.rotZ -= Math.min(0.015, scene.camera.rotZ);
+            } else if (scene.camera.rotZ < 0) {
+                scene.camera.rotZ += Math.min(0.015, Math.abs(scene.camera.rotZ));
+            }
+        }
+        if (view === "y") {
+            if (scene.camera.rotUp > 0) {
+                scene.camera.rotUp -= Math.min(0.015, scene.camera.rotUp);
+            } else if (scene.camera.rotUp < 0) {
+                scene.camera.rotUp += Math.min(0.015, Math.abs(scene.camera.rotUp));
+            }
+            if (scene.camera.rotZ > (Math.PI / 2)) {
+                scene.camera.rotZ -= Math.min(0.015, Math.PI / 2 - scene.camera.rotZ);
+            } else if (scene.camera.rotZ < (Math.PI / 2)) {
+                scene.camera.rotZ += Math.min(0.015, Math.abs(Math.PI / 2 - scene.camera.rotZ));
+            }
+        }
+        if (view === "z") {
+            if (scene.camera.rotUp > (Math.PI / 2)) {
+                scene.camera.rotUp -= Math.min(0.015, Math.PI /2 - scene.camera.rotUp);
+            } else if (scene.camera.rotUp < (Math.PI / 2)) {
+                scene.camera.rotUp += Math.min(0.015, Math.abs(Math.PI / 2 - scene.camera.rotUp));
+            }
+            if (scene.camera.rotZ > (0)) {
+                scene.camera.rotZ -= Math.min(0.015, scene.camera.rotZ);
+            } else if (scene.camera.rotZ < (0)) {
+                scene.camera.rotZ += Math.min(0.015, Math.abs(  scene.camera.rotZ));
+            }
+        }
         
         lastTick += tickInterval;
     }
     
     ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
-    
-    for (let id in players) {
-        const player = players[id];
 
-        let canX, canY
-
-        switch (view) {
-            case "x": {
-                canX = player.pos.y;
-                canY = player.pos.z;
-            }; break;
-            case "y": {
-                canX = player.pos.x;
-                canY = player.pos.z;
-            }; break;
-            case "z": {
-                canX = player.pos.y;
-                canY = player.pos.x;
-            }; break;
-        }
-        
-        let x = mainCanvas.width / 2 + canX,
-            y = mainCanvas.height / 2 + canY;
-        
-        ctx.beginPath();
-        ctx.arc(x, y, 5, 0, Math.TAU);
-        ctx.fill();
-    }
+    scene.render(ctx);
     
     requestAnimationFrame(render);
 }
-
-// function requestMove(direction) {
-//     switch (view) {
-//         case "x": {
-//             if (direction == "left"){
-//                 players[0].pos.addVector(new Vector3D(0, -5, 0));
-//             }
-//             if (direction == "right"){
-//                 players[0].pos.addVector(new Vector3D(0, 5, 0));
-//             }
-//         };
-//         case "y": {
-//             if (direction == "left"){
-//                 players[0].pos.addVector(new Vector3D(0, -5, 0));
-//             }
-//             if (direction == "right"){
-//                 players[0].pos.addVector(new Vector3D(0, 5, 0));
-//             }
-//         };
-//         case "z": {
-//             if (direction == "left"){
-//                 players[0].pos.addVector(new Vector3D(0, -5, 0));
-//             }
-//             if (direction == "right"){
-//                 players[0].pos.addVector(new Vector3D(0, 5, 0));
-//             }
-//         };
-//     }
-// } 
 
 
 let currControls = {horizontal:0, vertical:0};
@@ -157,7 +146,7 @@ window.addEventListener("keydown", (e) => {
             ]));
         }; break;
         case 87: {
-            currControls.vertical = -1;
+            currControls.vertical = 1;
             socket.send(clientCommands.encode([
                     {
                         key: "updateControls",
@@ -166,7 +155,7 @@ window.addEventListener("keydown", (e) => {
             ]));
         }; break;
         case 83: {
-            currControls.vertical = 1;
+            currControls.vertical = -1;
             socket.send(clientCommands.encode([
                     {
                         key: "updateControls",
@@ -193,8 +182,7 @@ window.addEventListener("keyup", (e) => {
                         value: currControls
                     }
             ]));
-            break;
-        };
+        }; break;
         case 87: case 83: {
             currControls.vertical = 0;
             socket.send(clientCommands.encode([
@@ -203,11 +191,15 @@ window.addEventListener("keyup", (e) => {
                         value: currControls
                     }
             ]));
-            break;
-        };
+        }; break;
     }
 });
 
 
-// finbar code tm
+let scene = new Engine.Scene();
 
+let colorarray = ["red","blue","green","orange","purple","pink"]
+
+scene.camera.rotUp = Math.PI / 2 
+
+scene.objects.push(new Engine.Cuboid(new Engine.V(-300, -300, -5), new Engine.V(300, 300, -20), colorarray))

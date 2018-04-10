@@ -21,17 +21,15 @@
             console.log(cube.getFaces());
             
             const scene = new Engine.Scene();
-            scene.objects.push(cube);
-            //scene.objects.push(new Engine.Point(new Engine.V(0, 0, 100), "red"));
-            //scene.objects.push(new Engine.Point(new Engine.V(-100, 0, 100), "lightgreen"));
-            //scene.objects.push(new Engine.Point(new Engine.V(0, 100, 100), "aqua"));
+            // scene.objects.push(cube);
             
             scene.camera.rotUp = Math.PI / 16;
             scene.camera.rotZ = Math.PI / 8 + 10 * Math.PI / 32;
-            //scene.camera.rotZ = 0;
-            
-            //scene.objects.push(new Engine.Line(new Engine.V(0, 0, 0), new Engine.V(1000, 0, 0), "orange"));
-            
+
+            for (let i = 0; i < 17; ++i ) {
+                scene.objects.push(new Engine.Point(new Engine.V(Math.random()*100,Math.random()*100,Math.random()*100)), "red") 
+            }
+
             scene.render(ctx);
             
             render();
@@ -39,6 +37,9 @@
                 ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
                 
                 scene.render(ctx);
+
+                scene.camera.rotUp += 0.015;
+                scene.camera.rotZ += 0.015;
                 
                 
                 requestAnimationFrame(render);

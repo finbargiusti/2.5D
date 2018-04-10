@@ -4,24 +4,69 @@
         <title>2.5D</title>
         <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
         <style>
+            @keyframes scrollcolor{
+                0% {color:hsl(0,70%,50%);}
+                16.66% {color:hsl(60, 70%, 50%);}
+                33.33% {color:hsl(120, 70%, 50%);}
+                50% {color:hsl(180, 70%, 50%);}
+                66.67% {color:hsl(240, 70%, 50%);}
+                83.33% {color:hsl(300, 70%, 50%);}
+                100% {color:hsl(359,70%,50%);}
+            }
+            @keyframes rotate{
+                0% {transform: rotate(1deg) scale(0.8);} 
+                10% {transform: rotate(-5deg);} 
+                20% {transform: rotate(4.5deg) scale(1.2);} 
+                30% {transform: rotate(-2.3deg);} 
+                40% {transform: rotate(6deg) scale(1);} 
+                50% {transform: rotate(-2.4deg);} 
+                60% {transform: rotate(1.4deg) ;} 
+                70% {transform: rotate(-4.3deg) scale(1.6);} 
+                80% {transform: rotate(5deg)    ;} 
+                90% {transform: rotate(-1.2deg) scale(0.5);} 
+                100% {transform: rotate(1deg) scale(0.8);} 
+            }
             body {
                 font-family: 'Press Start 2P', sans-serif;
                 -webkit-font-smoothing : none;
+                overflow:hidden;
+            }
+            .container {
+                position: absolute;
+                top:0;
+                left:0;
+                margin:0;
+                padding: 0;
+                height:100vh;
+                width:100vw;
+                text-align: center;
+                z-index:-100000;
             }
             #mainCanvas {
-                border: 1px solid black;
+                display: inline-block;
             }
+            .megaTitle {
+                animation:scrollcolor 10s infinite, rotate 20s infinite;
+                font-size:400%; 
+                text-align: center;
+                margin-top:20px
+            } 
         </style>
     </head>
     <body>
-        <h1>2.5D gud gam</h1>
-        <canvas id="mainCanvas" width=600 height=600></canvas>
+        <h1 class="megaTitle">2.5D</h1>
+        <div class="container">
+            <canvas id="mainCanvas" width=600 height=600></canvas>
+        </div>
         <p>Current View: </p><span id="view"></span>
         
+        <script src="2.5DEngine.js"></script>
         <script src="binary_min.js"></script>
         <script src="data_structures.js"></script>
         <script src="const.js"></script>
         <script src="class.js"></script>
         <script src="script.js"></script>
+        <audio loop autoplay src="music.mp3">
+        </audio>
     </body>
 </html>
